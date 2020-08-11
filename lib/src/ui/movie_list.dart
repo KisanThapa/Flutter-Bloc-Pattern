@@ -1,7 +1,8 @@
 import 'package:block_pattern_demo/src/blocs/movies_bloc.dart';
 import 'package:block_pattern_demo/src/models/item_model.dart';
-import 'package:block_pattern_demo/src/ui/movie_details.dart';
 import 'package:flutter/material.dart';
+
+import 'movie_details.dart';
 
 class MovieList extends StatefulWidget {
   @override
@@ -57,18 +58,39 @@ class _MovieListState extends State<MovieList> {
       itemBuilder: (BuildContext context, int index) {
         return Container(
           padding: EdgeInsets.all(5),
-          child: GestureDetector(
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => MovieDetails()),
-            ),
-            child: Image.network(
-              'https://image.tmdb.org/t/p/w185${snapshot.data.results[index].poster_path}',
-              fit: BoxFit.cover,
+          child: GridTile(
+            child: InkResponse(
+              enableFeedback: true,
+              child: Image.network(
+                'https://image.tmdb.org/t/p/w185${snapshot.data.results[index].poster_path}',
+                fit: BoxFit.cover,
+              ),
+              onTap: () => openDetailPage(
+                snapshot.data.results[index],
+                context,
+              ),
             ),
           ),
         );
       },
+    );
+  }
+
+  openDetailPage(moviedData, context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return MovieDetail(
+            title: moviedData.title,
+            posterUrl: moviedData.backdrop_path,
+            description: moviedData.overview,
+            releaseDate: moviedData.release_date,
+            voteAverage: moviedData.vote_average.toString(),
+            movieId: moviedData.id,
+          );
+        },
+      ),
     );
   }
 }

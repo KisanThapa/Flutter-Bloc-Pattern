@@ -68,6 +68,7 @@ class _MovieDetailState extends State<MovieDetail> {
               ),
             ];
           },
+          
           body: Padding(
             padding: const EdgeInsets.all(10.0),
             child: Column(
